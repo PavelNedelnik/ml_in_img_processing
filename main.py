@@ -12,7 +12,6 @@ import gc
 
 images = Path('.') / 'images'
 
-"""
 transforms = tio.Compose({
     tio.transforms.ZNormalization() : 1,
     tio.transforms.RandomAffine(scales=(0.7, 1.4)) : 0.2,
@@ -20,8 +19,6 @@ transforms = tio.Compose({
     tio.transforms.RandomElasticDeformation() : 0.2,
     tio.transforms.RandomGamma(log_gamma=(0.7, 1.5)) : 0.15
 })
-"""
-transforms = None
 indices = np.arange(len(list(images.glob('BraTS2021*'))))
 df = BraTS21(images, indices=indices, x_transforms=transforms)
 
