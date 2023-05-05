@@ -7,12 +7,12 @@ class ConvBlock(nn.Module):
         super().__init__()
         self.conv1 = nn.Sequential(
             nn.Conv3d(in_channels, out_channels, kernel_size=3, stride=fst_stride, padding=1),
-            nn.GroupNorm(8, out_channels), # TODO
+            nn.GroupNorm(32, out_channels),
             nn.LeakyReLU(negative_slope=0.01, inplace=True),
         )
         self.conv2 = nn.Sequential(
             nn.Conv3d(out_channels, out_channels, kernel_size=3, stride=1, padding=1),
-            nn.GroupNorm(8, out_channels),
+            nn.GroupNorm(32, out_channels),
             nn.LeakyReLU(negative_slope=0.01, inplace=True),
         )
 
@@ -53,28 +53,28 @@ class nnUNet(nn.Module):
 
         # encoder
         self.embed1 = nn.Sequential(
-            nn.Conv3d(4, 8, kernel_size=3, stride=1, padding=1),
+            nn.Conv3d(4, 32, kernel_size=3, stride=1, padding=1),
             nn.LeakyReLU(negative_slope=0.01, inplace=True),
-            nn.Conv3d(8, 8, kernel_size=3, stride=1, padding=1),
-            nn.GroupNorm(8, 8),
+            nn.Conv3d(32, 32, kernel_size=3, stride=1, padding=1),
+            nn.GroupNorm(32, 32),
             nn.LeakyReLU(negative_slope=0.01, inplace=True),
         )
-        self.embed2 = ConvBlock(8, 16, 2)
-        self.embed3 = ConvBlock(16, 32, 2)
-        self.embed4 = ConvBlock(32, 64, 2)
-        self.embed5 = ConvBlock(64, 128, 2)
-        self.embed6 = ConvBlock(128, 128, 2)
+        self.embed2 = ConvBlock(32, 64, 2)
+        self.embed3 = ConvBlock(64, 128, 2)
+        self.embed4 = ConvBlock(128, 256, 2)
+        self.embed5 = ConvBlock(256, 512, 2)
+        self.embed6 = ConvBlock(512, 512, 2)
 
         # decoder
-        self.decode5 = DecoderStage(128, 128)
-        self.decode4 = DecoderStage(128, 64)
-        self.out4 = OutputBlock(64)
-        self.decode3 = DecoderStage(64, 32)
-        self.out3 = OutputBlock(32)
-        self.decode2 = DecoderStage(32, 16)
-        self.out2 = OutputBlock(16)
-        self.decode1 = DecoderStage(16, 8)
-        self.out1 = OutputBlock(8)
+        self.decode5 = DecoderStage(512, 512)
+        self.decode4 = DecoderStage(512, 256)
+        self.out4 = OutputBlock(256)
+        self.decode3 = DecoderStage(256, 128)
+        self.out3 = OutputBlock(128)
+        self.decode2 = DecoderStage(128, 64)
+        self.out2 = OutputBlock(64)
+        self.decode1 = DecoderStage(64, 32)
+        self.out1 = OutputBlock(32)
 
     def forward(self, x):
         x1 = self.embed1(x)

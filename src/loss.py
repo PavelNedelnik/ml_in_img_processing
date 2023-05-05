@@ -14,10 +14,11 @@ class DiceBCELoss(nn.Module):
 
     def forward(self, y_pred, y_true, smooth=1e-5):
         loss = 0
-        # forr each deep supervision level
+        # for each deep supervision level
         for w, y in zip(self.weights, y_pred):
-            y = nn.functional.interpolate(y, size=y_true[0][0].shape, mode='nearest')  # fill the image
-            for c in range(len(y_true)):  # channel
+            y = nn.functional.interpolate(y, size=y_true[0][0].shape, mode='nearest')  # resample to the output resolution
+            # for each image
+            for c in range(len(y_true)):
                 y_c = y[:, c, :, :, :]
                 loss += w * nn.functional.binary_cross_entropy_with_logits(y_c, y_true[c], reduction='mean')
                 loss += w * dice_loss(y_c, y_true[c], smooth)

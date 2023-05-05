@@ -19,11 +19,8 @@ images = Path('.').parent / 'images'
 
 print('Unpacking files...')
 
-# TODO uncomment
-"""
 with tarfile.open(raw_data_path / 'BraTS2021_Training_Data.tar') as f:
     f.extractall(images)
-"""
 
 print('Done. Cleaning the data...')
 
