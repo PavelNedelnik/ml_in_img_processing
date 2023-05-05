@@ -55,7 +55,7 @@ def fit():
         loss_fn = DiceBCELoss()
         scorer = dice_loss
         optimizer = torch.optim.SGD(model.parameters(), lr=.01, momentum=.9, nesterov=True)
-        epochs = 1000
+        epochs = 100
         scheduler = torch.optim.lr_scheduler.PolynomialLR(optimizer, total_iters=epochs, power=.9)
         batch_size = 4
 
@@ -88,7 +88,7 @@ def fit():
               running_vloss = [l / (i + 1) for l in running_vloss]
                   
               print('LOSS train {} valid {}'.format(avg_loss, running_vloss))
-              if epoch and not epoch % 100:
+              if epoch and not epoch % 25:
                 torch.save(model.state_dict(), f'fold_{f}_model_snapshot_{snapshot_num}.pt')
                 snapshot_num += 1
 
