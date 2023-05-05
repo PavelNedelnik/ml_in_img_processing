@@ -13,7 +13,7 @@ import gc
 images = Path('.') / 'images'
 
 transforms = tio.Compose({
-    tio.transforms.ZNormalization() : 1,
+    # tio.transforms.ZNormalization() : 1,
     tio.transforms.RandomAffine(scales=(0.7, 1.4)) : 0.2,
     tio.transforms.RandomAffine(degrees=(-30, 30)) : 0.2,
     tio.transforms.RandomElasticDeformation() : 0.2,
