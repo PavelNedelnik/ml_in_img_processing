@@ -19,7 +19,7 @@ transforms = tio.Compose({
     tio.transforms.RandomGamma(log_gamma=(0.7, 1.5)) : 0.15
 })
 indices = np.arange(len(list(images.glob('BraTS2021*'))))
-df = BraTS21(images, indices=indices, image_size=(128, 128, 128), x_transforms=transforms)
+df = BraTS21(images, indices=indices, x_transforms=transforms)
 
 def train_step(model, train_loader, optimizer, loss_fn):
     avg_loss = 0.
